@@ -1,0 +1,15 @@
+.editor {
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+  width: fit-content;
+  padding: 40px;
+  box-sizing: border-box;
+  background: whitesmoke;
+  margin: auto;
+}
+
+.main-content {
+  margin: auto;
+  box-sizing: border-box;
+}

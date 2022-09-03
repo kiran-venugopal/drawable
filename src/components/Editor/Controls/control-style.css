@@ -1,0 +1,91 @@
+.color-display {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  box-shadow: rgb(214 214 214) 0px 0px 6px 1px;
+}
+
+.controls {
+  position: fixed;
+  left: 10px;
+  top: 30vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  background: white;
+  box-shadow: 1px 1px 4px rgb(221, 221, 221);
+  border-radius: 5px;
+  padding: 3px 0;
+}
+
+input[type='color'] {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  padding: 0;
+  border: 0;
+}
+
+button.control-item {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  width: 41px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  margin: 2px 5px;
+}
+
+button.control-item:hover {
+  background: whitesmoke;
+}
+
+button.control-item.active {
+  background: #f3f3f3;
+}
+
+.controls .menu {
+  position: relative;
+}
+
+.image-input.dropdown {
+  position: absolute;
+  left: 60px;
+  top: 0;
+  background: white;
+  padding: 5px 10px 10px 10px;
+  box-shadow: 0 0 8px 1px #e0e0e0;
+  border-radius: 5px;
+}
+.image-input.dropdown h3 {
+  margin-top: 0;
+  font-size: 1.1em;
+}
+.image-input.dropdown .field {
+  display: flex;
+}
+.field button {
+  background: #2196f3;
+  color: white;
+  border: navajowhite;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: 100ms transform;
+}
+.field button:active {
+  transform: translateY(1px);
+}
+.field input {
+  border: 1px solid #cbcbcb;
+  padding: 5px;
+  border-radius: 3px;
+  outline: none;
+}
+.image-input.dropdown input {
+  margin-right: 5px;
+}

@@ -54,7 +54,7 @@ function Editor() {
 
     window.addEventListener('keydown', function (e) {
       if (e.code === 'Backspace' || e.code === 'Delete') {
-        canvas.getActiveObjects().forEach((obj) => {
+        canvas.getActiveObjects().forEach((obj: any) => {
           if (obj.type === 'textbox' && obj.isEditing) {
             return;
           }

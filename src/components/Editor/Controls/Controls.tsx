@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, EventHandler, FormEventHandler, useRef, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, useRef, useState } from 'react';
 import { fabric } from 'fabric';
 import { initialEditorState } from '../Editor';
 

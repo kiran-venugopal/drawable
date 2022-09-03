@@ -5,6 +5,11 @@
   box-shadow: rgb(214 214 214) 0px 0px 6px 1px;
 }
 
+.secondary.controls {
+  right: 10px;
+  left: unset;
+}
+
 .controls {
   position: fixed;
   left: 10px;
@@ -36,6 +41,10 @@ button.control-item {
   cursor: pointer;
   background: transparent;
   margin: 2px 5px;
+}
+
+button.control-item:disabled {
+  opacity: 0.4;
 }
 
 button.control-item:hover {

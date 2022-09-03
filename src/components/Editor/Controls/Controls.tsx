@@ -128,7 +128,7 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
   };
 
   return (
-    <div className='controls'>
+    <div className=' controls'>
       <button onClick={handleControlClick} className='control-item color'>
         <div style={{ background: editorData.color }} className='color-display'></div>
         <input ref={colorRef as any} type='color' onChange={handleColorChange} />

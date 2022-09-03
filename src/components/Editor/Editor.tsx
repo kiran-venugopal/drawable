@@ -1,6 +1,7 @@
 import { fabric } from 'fabric';
 import { useEffect, useRef, useState } from 'react';
 import Controls from './Controls';
+import SecondaryControls from './Controls/SecondaryControls';
 import './editor-style.css';
 
 const freeDrawingControls = ['pencil', 'laser'];
@@ -69,6 +70,7 @@ function Editor() {
   return (
     <div className='editor'>
       <Controls canvas={canvas} editorState={editorState.current} />
+      <SecondaryControls canvas={canvas} editorState={editorState.current} />
       <div className='main-content'>
         <canvas id='fabric-container'></canvas>
       </div>

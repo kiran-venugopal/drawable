@@ -1,8 +1,10 @@
 import { fabric } from 'fabric';
 import { useEffect, useRef, useState } from 'react';
+import { createCanvas } from '~/utils/canvas';
 import Controls from './Controls';
 import SecondaryControls from './Controls/SecondaryControls';
 import './editor-style.css';
+import history from './History';
 
 const freeDrawingControls = ['pencil', 'laser'];
 
@@ -11,6 +13,7 @@ export const initialEditorState = {
   brushWidth: 2,
   backgroundColor: 'white',
   activeControl: 'pencil',
+  historyProcessing: false,
 };
 
 function Editor() {
@@ -18,28 +21,9 @@ function Editor() {
   const editorState = useRef(initialEditorState);
 
   useEffect(() => {
-    fabric.Object.prototype.transparentCorners = false;
-    fabric.Object.prototype.cornerColor = '#2196f3';
-    fabric.Object.prototype.cornerStyle = 'circle';
-    fabric.Object.prototype.strokeWidth = 5;
-    fabric.Object.prototype.borderScaleFactor = 2;
-    fabric.Object.prototype.cornerSize = 10;
-
-    const canvas = new fabric.Canvas('fabric-container', {
-      width: 1200,
-      height: 800,
-      isDrawingMode: freeDrawingControls.includes(editorState.current.activeControl),
-      selectionLineWidth: 3,
-      backgroundColor: editorState.current.backgroundColor,
-      selectionColor: '#2195f37c',
-      selectionBorderColor: '#2196f3',
-    });
-
-    canvas.freeDrawingBrush.width = editorState.current.brushWidth;
-    canvas.freeDrawingBrush.color = editorState.current.color;
+    const canvas = createCanvas(editorState.current);
 
     canvas.on('object:added', function (event) {
-      console.log(event);
       if (editorState.current.activeControl === 'laser') {
         event.target?.animate('opacity', 0, {
           onChange: (a: number) => {
@@ -50,6 +34,32 @@ function Editor() {
           },
           duration: 600,
         });
+      } else {
+        if (editorState.current.historyProcessing) {
+          return;
+        }
+        const json = event.target?.canvas?.toDatalessJSON();
+        history.add(json);
+      }
+    });
+
+    canvas.on('object:modified', function (event) {
+      if (editorState.current.activeControl !== 'laser') {
+        if (editorState.current.historyProcessing) {
+          return;
+        }
+        const json = event.target?.canvas?.toDatalessJSON();
+        history.add(json);
+      }
+    });
+
+    canvas.on('object:removed', function (event) {
+      if (editorState.current.activeControl !== 'laser') {
+        if (editorState.current.historyProcessing) {
+          return;
+        }
+        const json = event.target?.canvas?.toDatalessJSON();
+        history.add(json);
       }
     });
 
@@ -61,6 +71,29 @@ function Editor() {
           }
           canvas.remove(obj);
         });
+      }
+      const evtobj = e;
+      console.log({ evtobj });
+
+      if (evtobj.code === 'KeyZ' && evtobj.ctrlKey && evtobj.shiftKey) {
+        editorState.current.historyProcessing = true;
+        const state = history.redo();
+        console.log(state);
+        canvas.loadFromJSON(state, () => {
+          return null;
+        });
+        editorState.current.historyProcessing = false;
+        return;
+      }
+
+      if (evtobj.code === 'KeyZ' && evtobj.ctrlKey) {
+        editorState.current.historyProcessing = true;
+        const state = history.undo();
+        canvas.loadFromJSON(state, () => {
+          return null;
+        });
+        editorState.current.historyProcessing = false;
+        return;
       }
     });
 

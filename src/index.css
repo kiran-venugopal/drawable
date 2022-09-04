@@ -10,3 +10,19 @@ html,
 body {
   background: whitesmoke;
 }
+
+.dropdown {
+  position: absolute;
+  background: white;
+  padding: 5px;
+  box-shadow: 0 0 8px 1px #e0e0e0;
+  border-radius: 5px;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: transparent;
+  padding: 5px 10px;
+}

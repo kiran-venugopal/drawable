@@ -1,6 +1,8 @@
 import './control-style.css';
 import DownloadIcon from '../../../icons/download.svg';
 import DeleteIcon from '../../../icons/delete.svg';
+import UndoIcon from '../../../icons/undo.svg';
+import RedoIcon from '../../../icons/redo.svg';
 import { ControlsPropsType } from './Controls';
 import { useEffect, useState } from 'react';
 
@@ -42,13 +44,29 @@ function SecondaryControls({ editorState, canvas }: ControlsPropsType) {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Delete' }));
   };
 
+  const handleUndoRedoClick = (type: 'undo' | 'redo') => () => {
+    if (type === 'undo') {
+      window.dispatchEvent(new KeyboardEvent('keydown', { ctrlKey: true, code: 'KeyZ' }));
+    } else {
+      window.dispatchEvent(
+        new KeyboardEvent('keydown', { ctrlKey: true, code: 'KeyZ', shiftKey: true }),
+      );
+    }
+  };
+
   return (
     <div className='secondary controls'>
-      <button disabled={!enableDelete} onClick={handleDeleteIcon} className='control-item color'>
-        <DeleteIcon />
+      <button onClick={handleUndoRedoClick('undo')} className='control-item'>
+        <UndoIcon />
+      </button>
+      <button onClick={handleUndoRedoClick('redo')} className='control-item'>
+        <RedoIcon />
       </button>
       <button onClick={handleDownloadClick} className='control-item color'>
         <DownloadIcon />
+      </button>
+      <button disabled={!enableDelete} onClick={handleDeleteIcon} className='control-item color'>
+        <DeleteIcon />
       </button>
     </div>
   );

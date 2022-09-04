@@ -1,0 +1,42 @@
+.account-nav {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+.user {
+  font-size: 0.9em;
+  cursor: pointer;
+  background: white;
+  padding: 5px;
+  box-shadow: 1px 1px 4px rgb(221, 221, 221);
+  border-radius: 5px;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  font-size: 0.8em;
+  font-weight: 500;
+  background: grey;
+  color: white;
+  margin: auto;
+}
+
+.account-nav .dropdown {
+  right: 0px;
+  margin-top: 5px;
+  z-index: 1;
+  min-width: 100px;
+  text-align: center;
+}
+
+.account-nav button:hover {
+  background: whitesmoke;
+}

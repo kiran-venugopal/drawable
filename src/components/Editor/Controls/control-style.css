@@ -36,10 +36,7 @@ button.control-item {
   justify-content: center;
   padding: 8px;
   width: 41px;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
-  background: transparent;
   margin: 2px 5px;
 }
 
@@ -60,13 +57,9 @@ button.control-item.active {
 }
 
 .image-input.dropdown {
-  position: absolute;
   left: 60px;
   top: 0;
-  background: white;
   padding: 5px 10px 10px 10px;
-  box-shadow: 0 0 8px 1px #e0e0e0;
-  border-radius: 5px;
 }
 .image-input.dropdown h3 {
   margin-top: 0;

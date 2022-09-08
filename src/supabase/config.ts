@@ -8,3 +8,11 @@ const supabase = createClient(
 );
 
 export default supabase;
+
+export const channel = supabase.channel('user1-location', {
+  configs: {
+    broadcast: { ack: true },
+  },
+});
+
+export const usersChannel = supabase.channel('online-users');

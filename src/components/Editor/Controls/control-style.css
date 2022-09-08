@@ -13,7 +13,6 @@
 .controls {
   position: fixed;
   left: 10px;
-  top: 30vh;
   display: flex;
   flex-direction: column;
   z-index: 10;

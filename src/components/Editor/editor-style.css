@@ -12,4 +12,24 @@
 .main-content {
   margin: auto;
   box-sizing: border-box;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  position: relative;
+}
+.pointer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 200ms;
+}
+
+.pointer .name {
+  color: white;
+  background: grey;
+  font-size: 0.8em;
+  padding: 0.2em 0.3em;
+  border-radius: 0.3em;
+  display: flex;
+  margin-left: 0.5em;
+  margin-top: -0.5em;
 }

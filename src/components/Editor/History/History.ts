@@ -1,6 +1,6 @@
 class History {
-  actions: any[] = [];
-  currentIndex = -1;
+  actions: any[] = [{ background: 'white' }];
+  currentIndex = 0;
   limit = 200;
   add(object: any) {
     console.log('added', object);

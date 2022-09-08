@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AccountDataType, actions } from '~/redux/stores';
-import supabase from '~/supabase/config';
+import { AccountDataType, accountActions } from '~/redux/stores';
+import supabase, { usersChannel } from '~/supabase/config';
 import './navbar-style.css';
 
 function Navbar() {
@@ -11,20 +11,31 @@ function Navbar() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const session = supabase.auth.session();
-      console.log(session);
+      await usersChannel.subscribe();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      console.log({ session });
       if (session) {
-        dispatch(actions.setAccount({ isLoggedIn: true, user: session.user?.user_metadata || {} }));
+        dispatch(
+          accountActions.setAccount({ isLoggedIn: true, user: session.user?.user_metadata || {} }),
+        );
+        await usersChannel.track({
+          name: 'Kiran',
+          color: session.user.user_metadata.color,
+          id: accountData.tempId,
+        });
       }
     };
     checkAuth();
   }, []);
 
   const handleSignInClick = async () => {
-    const { user, session, error } = await supabase.auth.signIn({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
-    console.log({ user, session, error });
+    console.log({ data, error });
   };
 
   const handleSignOut = async () => {

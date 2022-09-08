@@ -1,12 +1,13 @@
 import { fabric } from 'fabric';
 import { useEffect, useRef, useState } from 'react';
+import { channel, usersChannel } from '~/supabase/config';
 import { createCanvas } from '~/utils/canvas';
 import Controls from './Controls';
 import SecondaryControls from './Controls/SecondaryControls';
 import './editor-style.css';
 import history from './History';
-
-const freeDrawingControls = ['pencil', 'laser'];
+import CursorIcon from '../../icons/cursor';
+import Pointers from './Pointers/Pointers';
 
 export const initialEditorState = {
   color: '#ce1fff',
@@ -19,6 +20,7 @@ export const initialEditorState = {
 function Editor() {
   const [canvas, setCanvas] = useState<fabric.Canvas>();
   const editorState = useRef(initialEditorState);
+  const pointerRef = useRef<HTMLElement>();
 
   useEffect(() => {
     const canvas = createCanvas(editorState.current);
@@ -106,6 +108,7 @@ function Editor() {
       <SecondaryControls canvas={canvas} editorState={editorState.current} />
       <div className='main-content'>
         <canvas id='fabric-container'></canvas>
+        <Pointers canvas={canvas} />
       </div>
     </div>
   );

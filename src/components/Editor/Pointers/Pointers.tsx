@@ -13,7 +13,7 @@ function Pointers({ canvas }: PointerProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    canvas?.on('mouse:move', async function (event) {
+    async function handleMove(event) {
       const { e } = event;
       const rect = (e.target as any)?.getBoundingClientRect();
 
@@ -27,7 +27,10 @@ function Pointers({ canvas }: PointerProps) {
           height: canvas?.height || 0,
         },
       });
-    });
+    }
+
+    canvas?.on('mouse:move', handleMove);
+    canvas?.on('touch:drag', handleMove);
   }, [canvas]);
 
   useEffect(() => {

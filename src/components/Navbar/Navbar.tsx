@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AccountDataType, accountActions } from '~/redux/stores';
 import supabase, { usersChannel } from '~/supabase/config';
+import { getRandomRolor } from '~/utils/account';
 import './navbar-style.css';
 
 function Navbar() {
@@ -24,6 +25,12 @@ function Navbar() {
         await usersChannel.track({
           name: 'Kiran',
           color: session.user.user_metadata.color,
+          id: accountData.tempId,
+        });
+      } else {
+        await usersChannel.track({
+          name: 'Anonymous',
+          color: getRandomRolor(),
           id: accountData.tempId,
         });
       }

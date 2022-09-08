@@ -13,16 +13,16 @@ function PointerItem({ fill, name, id, canvas }: PointerItemProps) {
   const pointerRef = useRef<HTMLSpanElement>();
 
   useEffect(() => {
-    channel.on('broadcast', { event: `location(${id})` }, ({ payload }) => {
+    channel.on('broadcast', { event: `location(${id})` }, ({ payload }: any) => {
       let x = canvas?.width ? (canvas?.width / payload.width) * payload.x : payload.x;
       let y = canvas?.height ? (canvas?.height / payload.height) * payload.y : payload.y;
 
-      if (x > (canvas.width || 0)) {
-        x = canvas.width || 0;
+      if (x > (canvas?.width || 0)) {
+        x = canvas?.width || 0;
       }
 
-      if (y > (canvas.height || 0)) {
-        y = canvas.height || 0;
+      if (y > (canvas?.height || 0)) {
+        y = canvas?.height || 0;
       }
 
       if (pointerRef.current) {

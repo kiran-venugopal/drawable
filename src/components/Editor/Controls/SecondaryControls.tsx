@@ -6,7 +6,7 @@ import RedoIcon from '../../../icons/redo.svg';
 import { ControlsPropsType } from './Controls';
 import { useEffect, useState } from 'react';
 
-function SecondaryControls({ editorState, canvas }: ControlsPropsType) {
+function SecondaryControls({ canvas }: ControlsPropsType) {
   const [enableDelete, setEnableDelete] = useState(false);
 
   useEffect(() => {

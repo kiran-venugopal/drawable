@@ -13,7 +13,7 @@ function Pointers({ canvas }: PointerProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    async function handleMove(event) {
+    async function handleMove(event: any) {
       const { e } = event;
       const rect = (e.target as any)?.getBoundingClientRect();
 

@@ -9,7 +9,7 @@ export type PointerProps = {
 };
 
 function Pointers({ canvas }: PointerProps) {
-  const accountData = useSelector<any, AccountDataType>((state) => state);
+  const accountData = useSelector<any, AccountDataType>((state) => state.account);
   const dispatch = useDispatch();
 
   useEffect(() => {

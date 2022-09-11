@@ -1,5 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { uuidv4 } from '~/utils/account';
+import { getLocalFileId } from '~/utils/canvas';
 
 export type ActiveUserType = {
   name: string;
@@ -12,9 +13,16 @@ export type AccountDataType = {
   user: {
     name?: string;
     color?: string;
+    id?: string;
+    files?: string[];
   };
   tempId: string;
   activeUsers: ActiveUserType[];
+};
+
+export type FilesStateType = {
+  files: any[];
+  activeFile: string;
 };
 
 const initialAccountState: AccountDataType = {
@@ -24,8 +32,13 @@ const initialAccountState: AccountDataType = {
   activeUsers: [],
 };
 
+const initialFilesState: FilesStateType = {
+  files: [],
+  activeFile: getLocalFileId(),
+};
+
 const accountSlice = createSlice({
-  name: 'counter',
+  name: 'account',
   initialState: initialAccountState,
   reducers: {
     setAccount(state, { payload }: { payload: Partial<AccountDataType> }) {
@@ -48,10 +61,31 @@ const accountSlice = createSlice({
   },
 });
 
+const filesSlice = createSlice({
+  name: 'files',
+  initialState: initialFilesState,
+  reducers: {
+    setFiles(state, { payload }: { payload: Partial<FilesStateType> }) {
+      return { ...state, ...payload };
+    },
+  },
+});
+
 export const accountActions = accountSlice.actions;
+export const filesActions = filesSlice.actions;
+
+const reducerObj = {
+  account: accountSlice.reducer,
+  files: filesSlice.reducer,
+};
+
+export type ReducersType = {
+  account: AccountDataType;
+  files: FilesStateType;
+};
 
 const store = configureStore({
-  reducer: accountSlice.reducer,
+  reducer: reducerObj,
 });
 
 export default store;

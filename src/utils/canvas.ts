@@ -50,5 +50,32 @@ export function createCanvas(editorStateRef: any): fabric.Canvas {
 
   canvas.freeDrawingBrush.width = editorStateRef.brushWidth;
   canvas.freeDrawingBrush.color = editorStateRef.color;
+  const filteId = getLocalFileId();
+  if (filteId === 'local') {
+    const filteContent = getLocalFilteContent();
+    canvas.loadFromJSON(filteContent);
+  }
   return canvas;
+}
+
+export function getLocalFileId() {
+  const fileId = window.localStorage.getItem('active_file');
+  if (fileId) return fileId;
+  const localId = 'local';
+  window.localStorage.setItem('active_file', localId);
+  return localId;
+}
+
+export function getLocalFilteContent() {
+  const localContent = { background: 'white' };
+  const fileContent =
+    JSON.parse(window.localStorage.getItem('local_content') || 'null') || localContent;
+  if (fileContent) return fileContent;
+
+  window.localStorage.setItem('local_content', JSON.stringify(localContent));
+  return localContent;
+}
+
+export function setLocalFilteContent(content: { [key: string]: any }) {
+  window.localStorage.setItem('local_content', JSON.stringify(content || {}));
 }

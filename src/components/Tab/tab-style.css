@@ -1,0 +1,40 @@
+#app {
+  border-radius: 3px;
+  border: 1px solid #e5e5e5;
+  margin: 15px;
+  background-color: white;
+}
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tab {
+  width: calc(100% - 50px);
+  padding: 10px;
+  color: #444;
+  font-size: 13px;
+}
+
+.tab-container > ul > li {
+  display: inline-block;
+  margin-left: 0;
+  padding: 10px;
+  border-bottom: 2px solid #eee;
+  transition: all 0.5s;
+  font-weight: 400;
+  cursor: pointer;
+  color: rgb(65, 65, 65);
+  font-size: 13px;
+}
+.tab-container > ul {
+  margin: 0;
+  padding-left: 0.5em;
+}
+
+.tab-container > ul > li.selected {
+  border-bottom: 2px solid var(--primary);
+  color: #444;
+  color: var(--primary);
+}

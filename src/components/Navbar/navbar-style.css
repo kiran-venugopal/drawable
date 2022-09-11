@@ -40,3 +40,50 @@
 .account-nav button:hover {
   background: whitesmoke;
 }
+
+.app-menu {
+  position: fixed;
+  left: 0.5em;
+  top: 0.5em;
+  z-index: 10;
+}
+
+.app-menu .menu {
+  width: 500px;
+}
+
+button.logo {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 50% 50%;
+  grid-gap: 0.3em;
+  padding: 0.5em;
+  background: white;
+  box-shadow: 1px 1px 4px rgb(221 221 221);
+  margin-bottom: 0.4em;
+}
+
+.files {
+  display: flex;
+}
+
+.file-item {
+  box-shadow: 0px 0px 12px #dadada;
+  border-radius: 5px;
+  color: #2d2d2d;
+  border: 5px solid white;
+  cursor: pointer;
+}
+
+.file-item img {
+  height: 80px;
+  min-height: 80px;
+  min-width: 120px;
+}
+
+.file-item .title {
+  font-size: 1em;
+  font-weight: 500;
+  padding: 0.2em 0.5em;
+  background: #f3f3f3;
+}

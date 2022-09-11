@@ -1,7 +1,9 @@
 import { fabric } from 'fabric';
 import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { FilesStateType, ReducersType } from '~/redux/stores';
 
-import { createCanvas } from '~/utils/canvas';
+import { createCanvas, setLocalFilteContent } from '~/utils/canvas';
 import Controls from './Controls';
 import SecondaryControls from './Controls/SecondaryControls';
 import './editor-style.css';
@@ -20,6 +22,7 @@ export const initialEditorState = {
 function Editor() {
   const [canvas, setCanvas] = useState<fabric.Canvas>();
   const editorState = useRef(initialEditorState);
+  const { activeFile, files } = useSelector<ReducersType, FilesStateType>((state) => state.files);
 
   useEffect(() => {
     const canvas = createCanvas(editorState.current);
@@ -39,8 +42,10 @@ function Editor() {
         if (editorState.current.historyProcessing) {
           return;
         }
-        const json = event.target?.canvas?.toDatalessJSON();
+        const json = event.target?.canvas?.toJSON();
+
         history.add(json);
+        setLocalFilteContent(json as any);
       }
     });
 
@@ -49,8 +54,9 @@ function Editor() {
         if (editorState.current.historyProcessing) {
           return;
         }
-        const json = event.target?.canvas?.toDatalessJSON();
+        const json = event.target?.canvas?.toJSON();
         history.add(json);
+        setLocalFilteContent(json as any);
       }
     });
 
@@ -61,6 +67,7 @@ function Editor() {
         }
         const json = event.target?.canvas?.toDatalessJSON();
         history.add(json);
+        setLocalFilteContent(json as any);
       }
     });
 
@@ -100,6 +107,17 @@ function Editor() {
 
     setCanvas(canvas);
   }, []);
+
+  useEffect(() => {
+    //TODO: check loading state
+    if (canvas && activeFile !== 'local') {
+      const file = files.find((f) => f.id === activeFile);
+      if (file)
+        canvas.loadFromJSON(file.content, () => {
+          return;
+        });
+    }
+  }, [canvas, activeFile]);
 
   return (
     <div className='editor'>

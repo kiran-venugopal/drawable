@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "start":"npm run dev",
+    "start": "npm run dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "npx eslint src",
@@ -20,7 +20,8 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-redux": "^8.0.2",
-    "redux": "^4.2.0"
+    "redux": "^4.2.0",
+    "use-container-click": "^1.0.0"
   },
   "devDependencies": {
     "@types/fabric": "^4.5.12",

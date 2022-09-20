@@ -3,7 +3,6 @@ class History {
   currentIndex = 0;
   limit = 200;
   add(object: any) {
-    console.log('added', object);
     this.actions.push(object);
     this.currentIndex = this.actions.length - 1;
     if (this.actions.length > this.limit) {

@@ -1,7 +1,13 @@
 .account-nav {
+  margin: 0.5em;
+}
+
+.navbar {
   position: fixed;
-  top: 10px;
-  right: 10px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   z-index: 10;
 }
 
@@ -42,9 +48,7 @@
 }
 
 .app-menu {
-  position: fixed;
-  left: 0.5em;
-  top: 0.5em;
+  margin: 0.5em;
   z-index: 10;
 }
 
@@ -68,11 +72,11 @@ button.logo {
 }
 
 .file-item {
-  box-shadow: 0px 0px 12px #dadada;
+  box-shadow: 0px 0px 5px #dadada;
   border-radius: 5px;
   color: #2d2d2d;
-  border: 5px solid white;
   cursor: pointer;
+  border: 1px solid #dedede;
 }
 
 .file-item img {
@@ -86,4 +90,23 @@ button.logo {
   font-weight: 500;
   padding: 0.2em 0.5em;
   background: #f3f3f3;
+}
+
+.file-name input {
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #1780d3;
+  outline: none;
+  margin-top: 0.5em;
+}
+
+.file-name .text:hover {
+  text-decoration: underline;
+}
+
+.file-name .text {
+  font-size: 0.9em;
+  margin: 0.4em 0;
+  cursor: pointer;
 }

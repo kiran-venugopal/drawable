@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { uuidv4 } from '~/utils/account';
-import { getLocalFileId } from '~/utils/canvas';
+import filesSlice, { FilesStateType } from './filesSlice';
 
 export type ActiveUserType = {
   name: string;
@@ -20,21 +20,11 @@ export type AccountDataType = {
   activeUsers: ActiveUserType[];
 };
 
-export type FilesStateType = {
-  files: any[];
-  activeFile: string;
-};
-
 const initialAccountState: AccountDataType = {
   isLoggedIn: false,
   user: {},
   tempId: uuidv4(),
   activeUsers: [],
-};
-
-const initialFilesState: FilesStateType = {
-  files: [],
-  activeFile: getLocalFileId(),
 };
 
 const accountSlice = createSlice({
@@ -57,16 +47,6 @@ const accountSlice = createSlice({
         ...state,
         activeUsers: state.activeUsers.filter((user) => !ids.includes(user.id)),
       };
-    },
-  },
-});
-
-const filesSlice = createSlice({
-  name: 'files',
-  initialState: initialFilesState,
-  reducers: {
-    setFiles(state, { payload }: { payload: Partial<FilesStateType> }) {
-      return { ...state, ...payload };
     },
   },
 });

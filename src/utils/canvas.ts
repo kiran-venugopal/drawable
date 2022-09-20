@@ -1,5 +1,43 @@
 import { fabric } from 'fabric';
 
+const mock = {
+  type: 'rect',
+  version: '5.2.4',
+  originX: 'left',
+  originY: 'top',
+  left: 240.14,
+  top: 48.78,
+  width: 100,
+  height: 100,
+  fill: '#ce1fff',
+  stroke: null,
+  strokeWidth: 5,
+  strokeDashArray: null,
+  strokeLineCap: 'butt',
+  strokeDashOffset: 0,
+  strokeLineJoin: 'miter',
+  strokeUniform: false,
+  strokeMiterLimit: 4,
+  scaleX: 1,
+  scaleY: 1,
+  angle: 0,
+  flipX: false,
+  flipY: false,
+  opacity: 1,
+  shadow: null,
+  visible: true,
+  backgroundColor: '',
+  fillRule: 'nonzero',
+  paintFirst: 'fill',
+  globalCompositeOperation: 'source-over',
+  skewX: 0,
+  skewY: 0,
+  rx: 0,
+  ry: 0,
+};
+
+export const obj = new fabric.Rect(mock);
+
 export function createCanvas(editorStateRef: any): fabric.Canvas {
   fabric.Object.prototype.transparentCorners = false;
   fabric.Object.prototype.cornerColor = '#2196f3';
@@ -19,6 +57,8 @@ export function createCanvas(editorStateRef: any): fabric.Canvas {
     selectionColor: '#2195f37c',
     selectionBorderColor: '#2196f3',
   });
+
+  window.canvas = canvas;
 
   function resizeCanvas() {
     const { innerWidth } = window;
@@ -50,10 +90,10 @@ export function createCanvas(editorStateRef: any): fabric.Canvas {
 
   canvas.freeDrawingBrush.width = editorStateRef.brushWidth;
   canvas.freeDrawingBrush.color = editorStateRef.color;
-  const filteId = getLocalFileId();
-  if (filteId === 'local') {
-    const filteContent = getLocalFilteContent();
-    canvas.loadFromJSON(filteContent);
+  const fileId = getLocalFileId();
+  if (fileId === 'local') {
+    const fileContent = getLocalFilteContent();
+    canvas.loadFromJSON(fileContent || {});
   }
   return canvas;
 }

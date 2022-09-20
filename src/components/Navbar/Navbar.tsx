@@ -1,9 +1,11 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AccountDataType, accountActions, ReducersType } from '~/redux/stores';
-import supabase, { usersChannel } from '~/supabase/config';
+import { FilesStateType } from '~/redux/filesSlice';
+import { AccountDataType, accountActions, ReducersType, filesActions } from '~/redux/stores';
+import supabase, { realtimeUser } from '~/supabase/config';
 import { getRandomRolor } from '~/utils/account';
 import AppMenu from './AppMenu';
+import FileName from './FileName';
 import './navbar-style.css';
 
 function Navbar() {
@@ -13,12 +15,9 @@ function Navbar() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      await usersChannel.subscribe();
       const {
         data: { session },
       } = await supabase.auth.getSession();
-
-      console.log({ session });
       if (session) {
         const userData = session.user?.user_metadata || {};
         userData.id = session.user.id;
@@ -31,45 +30,49 @@ function Navbar() {
           });
         }
         dispatch(accountActions.setAccount({ isLoggedIn: true, user: userData || {} }));
-        await usersChannel.track({
+        // start broadcasting pointer movement
+        realtimeUser.setUser({
           name: 'Kiran',
           color: userData.color,
           id: accountData.tempId,
         });
-        const { data, error } = await supabase.from('files').select().eq('owner_id', userData.id);
+
+        // fetching user files
+        const { data, error } = await supabase
+          .from('files')
+          .select()
+          .in('id', userData.files || []);
+
         if (error) {
           console.error(error);
           return;
         }
-        console.log({ data });
-        if (!data.length) {
-          const { data, error } = await supabase
-            .from('files')
-            .insert({
-              title: 'File One',
-              owner_id: userData.id,
-              content: { background: 'white' },
-              description: 'file created as part of testing',
-            })
-            .select();
-          console.log({ data });
-          if (error) {
-            console.error(error);
-            return;
-          }
-          await supabase.auth.updateUser({
-            data: {
-              files: data.map((f) => f.id),
-            },
-          });
+
+        const fileData: Partial<FilesStateType> = { files: data };
+
+        // selecting the default file
+        if (data.length) {
+          fileData.activeFile = data[0].id;
+          window.localStorage.setItem('active_file', data[0].id);
+        }
+
+        dispatch(filesActions.setFiles(fileData));
+
+        if (error) {
+          console.error(error);
+          return;
         }
       } else {
-        await usersChannel.track({
+        realtimeUser.setUser({
           name: 'Anonymous',
           color: getRandomRolor(),
           id: accountData.tempId,
         });
+        window.localStorage.setItem('active_file', 'local');
+        dispatch(filesActions.setFiles({ activeFile: 'local' }));
       }
+
+      dispatch(filesActions.setFilesLoading(false));
     };
     checkAuth();
   }, []);
@@ -100,8 +103,9 @@ function Navbar() {
   };
 
   return (
-    <Fragment>
+    <div className='navbar'>
       <AppMenu />
+      <FileName />
       <div className='account-nav'>
         {accountData.isLoggedIn ? (
           <Fragment>
@@ -120,7 +124,7 @@ function Navbar() {
           <button onClick={handleSignInClick}>Sign In</button>
         )}
       </div>
-    </Fragment>
+    </div>
   );
 }
 

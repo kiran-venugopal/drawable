@@ -31,6 +31,20 @@ button {
   padding: 5px 10px;
 }
 
+button.primary {
+  background: var(--primary);
+  color: white;
+  transition: transform 100ms;
+}
+
+button.primary:hover {
+  transform: scale(1.05);
+}
+
+button.primary:active {
+  transform: translateY(0.1em) scale(1.05);
+}
+
 .spinner {
   border: 3px solid rgb(214, 214, 214);
   border-radius: 50%;

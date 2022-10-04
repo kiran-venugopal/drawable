@@ -14,11 +14,13 @@ export type FilesStateType = {
   files: FileType[];
   activeFile: string;
   isFilesLoading: boolean;
+  filesFetchedOn: Date | null;
 };
 const initialFilesState: FilesStateType = {
   files: [],
   activeFile: getLocalFileId(),
   isFilesLoading: true,
+  filesFetchedOn: null,
 };
 
 const filesSlice = createSlice({
@@ -26,7 +28,7 @@ const filesSlice = createSlice({
   initialState: initialFilesState,
   reducers: {
     setFiles(state, { payload }: { payload: Partial<FilesStateType> }) {
-      return { ...state, ...payload };
+      return { ...state, ...payload, filesFetchedOn: new Date() };
     },
     setFilesLoading(state, { payload }) {
       return { ...state, isFilesLoading: payload };
@@ -40,6 +42,12 @@ const filesSlice = createSlice({
           }
           return f;
         }),
+      };
+    },
+    pushFiles(state, { payload = [] }) {
+      return {
+        ...state,
+        files: [...state.files, ...payload],
       };
     },
   },

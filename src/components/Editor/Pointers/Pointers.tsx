@@ -21,17 +21,6 @@ function Pointers({ canvas }: PointerProps) {
       const { e } = event;
       const rect = (e.target as any)?.getBoundingClientRect();
 
-      // await channel.send({
-      //   type: `broadcast`,
-      //   event: `location(${activeFile})(${accountData.tempId})`,
-      //   payload: {
-      //     x: e.clientX - rect.left,
-      //     y: e.clientY - rect.top,
-      //     width: canvas?.width || 0,
-      //     height: canvas?.height || 0,
-      //   },
-      // });
-
       await realtimeUser.cursorChange({
         activeFile,
         tempAccountId: accountData.tempId,

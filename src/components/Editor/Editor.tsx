@@ -3,13 +3,13 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FilesStateType } from '~/redux/filesSlice';
 import { AccountDataType, ReducersType } from '~/redux/stores';
+import { updateFile } from '~/supabase/api';
 import { realtimeUser } from '~/supabase/config';
-import { updateFile, uuidv4 } from '~/utils/account';
-
-import { createCanvas, obj, setLocalFilteContent } from '~/utils/canvas';
+import { createCanvas, getAbsolueObjects, setLocalFilteContent } from '~/utils/canvas';
 import Controls from './Controls';
 import SecondaryControls from './Controls/SecondaryControls';
 import './editor-style.css';
+import { hanldeObjectAdd } from './handlers/canvas';
 import history from './History';
 
 import Pointers from './Pointers/Pointers';
@@ -32,126 +32,117 @@ function Editor() {
   const { tempId } = useSelector<ReducersType, AccountDataType>((state) => state.account);
 
   useEffect(() => {
-    if (!isFilesLoading) {
-      console.log('effect');
-      const canvas = createCanvas(editorState.current);
+    if (isFilesLoading && activeFile !== 'local') return;
 
-      canvas.on('object:added', function (event) {
-        if (editorState.current.activeControl === 'laser') {
-          event.target?.animate('opacity', 0, {
-            onChange: (a: number) => {
-              if (a === 0) {
-                if (event.target) canvas.remove(event.target);
-              }
-              canvas.renderAll.bind(canvas)();
-            },
-            duration: 600,
+    const canvas = createCanvas(editorState.current);
+
+    const onAdded = (e) => hanldeObjectAdd(e, editorState, canvas, tempId);
+
+    const onModified = (event) => {
+      if (editorState.current.activeControl !== 'laser') {
+        if (editorState.current.historyProcessing) {
+          return;
+        }
+        const json = event.target?.canvas?.toJSON(['id']);
+        history.add(json);
+        setLocalFilteContent(json as any);
+        const objInJSON = event.target?.toJSON(['id']);
+
+        updateFile(editorState.current.fileId, { content: json }).catch((err) => {
+          console.error('Error while updating file', err);
+        });
+        console.log({ objInJSON });
+        if (objInJSON.type === 'activeSelection') {
+          const objects = getAbsolueObjects(canvas);
+          realtimeUser.fileChange({
+            activeFile,
+            tempAccountId: tempId,
+            objects,
+            type: 'modified',
           });
+          // transform object
         } else {
-          console.log('added');
-          console.log({ file: event.target?.canvas?.toJSON(), target: event.target });
-          if (editorState.current.historyProcessing) {
-            return;
-          }
-
-          const newObjectId = uuidv4();
-          const object: any = event.target;
-          if (!object?.id) {
-            object?.set('id' as any, newObjectId);
-            const objectInJSON = object?.toJSON();
-            objectInJSON.id = newObjectId;
-
-            realtimeUser
-              .fileChange({
-                activeFile,
-                tempAccountId: tempId,
-                objects: [objectInJSON],
-              })
-              .then((res) => {
-                console.log({ res });
-                return;
-              });
-          }
-
-          const json = event.target?.canvas?.toObject(['id']);
-          console.log({ json });
-          history.add(json);
-          setLocalFilteContent(json as any);
-
-          updateFile(editorState.current.fileId, { content: json }).catch((err) => {
-            console.error('Error while updating file', err);
-          });
-
-          console.log({ activeFile, tempId });
-        }
-      });
-
-      canvas.on('object:modified', function (event) {
-        if (editorState.current.activeControl !== 'laser') {
-          if (editorState.current.historyProcessing) {
-            return;
-          }
-          const json = event.target?.canvas?.toJSON();
-          history.add(json);
-          setLocalFilteContent(json as any);
-          updateFile(editorState.current.fileId, { content: json }).catch((err) => {
-            console.error('Error while updating file', err);
+          realtimeUser.fileChange({
+            activeFile,
+            tempAccountId: tempId,
+            objects: [objInJSON],
+            type: 'modified',
           });
         }
-        console.log('modified');
-      });
+      }
+      console.log('modified');
+    };
 
-      canvas.on('object:removed', function (event) {
-        console.log('removed');
-        if (editorState.current.activeControl !== 'laser') {
-          if (editorState.current.historyProcessing) {
-            return;
-          }
-          const json = event.target?.canvas?.toDatalessJSON();
-          history.add(json);
-          setLocalFilteContent(json as any);
-          updateFile(editorState.current.fileId, { content: json }).catch((err) => {
-            console.error('Error while updating file', err);
-          });
+    const onRemoved = (event) => {
+      console.log('removed');
+      if (editorState.current.activeControl !== 'laser') {
+        if (editorState.current.historyProcessing) {
+          return;
         }
-      });
+        const json = event.target?.canvas?.toDatalessJSON();
+        history.add(json);
+        setLocalFilteContent(json as any);
+        updateFile(editorState.current.fileId, { content: json }).catch((err) => {
+          console.error('Error while updating file', err);
+        });
+      }
+    };
 
-      window.addEventListener('keydown', function (e) {
-        if (e.code === 'Backspace' || e.code === 'Delete') {
-          canvas.getActiveObjects().forEach((obj: any) => {
-            if (obj.type === 'textbox' && obj.isEditing) {
-              return;
-            }
+    const onKeydown = (e) => {
+      if (e.code === 'Backspace' || e.code === 'Delete') {
+        canvas.getActiveObjects().forEach((obj: any) => {
+          if (obj.type === 'textbox' && obj.isEditing) {
+            return;
+          } else {
             canvas.remove(obj);
-          });
-        }
-        const evtobj = e;
-        console.log({ evtobj });
+            canvas.discardActiveObject().renderAll();
+          }
+        });
+      }
+      const evtobj = e;
+      console.log({ evtobj });
 
-        if (evtobj.code === 'KeyZ' && evtobj.ctrlKey && evtobj.shiftKey) {
-          editorState.current.historyProcessing = true;
-          const state = history.redo();
-          console.log(state);
-          canvas.loadFromJSON(state, () => {
-            return null;
-          });
-          editorState.current.historyProcessing = false;
-          return;
-        }
+      if (evtobj.code === 'KeyZ' && evtobj.ctrlKey && evtobj.shiftKey) {
+        editorState.current.historyProcessing = true;
+        const state = history.redo();
+        console.log(state);
+        canvas.loadFromJSON(state, () => {
+          return null;
+        });
+        editorState.current.historyProcessing = false;
+        return;
+      }
 
-        if (evtobj.code === 'KeyZ' && evtobj.ctrlKey) {
-          editorState.current.historyProcessing = true;
-          const state = history.undo();
-          canvas.loadFromJSON(state, () => {
-            return null;
-          });
-          editorState.current.historyProcessing = false;
-          return;
-        }
-      });
+      if (evtobj.code === 'KeyZ' && evtobj.ctrlKey) {
+        editorState.current.historyProcessing = true;
+        const state = history.undo();
+        canvas.loadFromJSON(state, () => {
+          return null;
+        });
+        editorState.current.historyProcessing = false;
+        return;
+      }
+    };
 
-      setCanvas(canvas);
-    }
+    canvas.on('object:added', onAdded);
+
+    canvas.on('object:modified', onModified);
+
+    canvas.on('object:removed', onRemoved);
+
+    window.addEventListener('keydown', onKeydown);
+
+    setCanvas(canvas);
+
+    return () => {
+      canvas.off('object:added', onAdded);
+
+      canvas.off('object:modified', onModified);
+
+      canvas.off('object:removed', onRemoved);
+
+      window.removeEventListener('keydown', onKeydown);
+    };
   }, [isFilesLoading]);
 
   useEffect(() => {
@@ -159,12 +150,13 @@ function Editor() {
     if (canvas && activeFile !== 'local') {
       const file = files.find((f) => f.id === activeFile);
       console.log({ file });
-      if (file)
+      if (file) {
+        editorState.current.fileId = activeFile;
         canvas.loadFromJSON(file.content, () => {
           return;
         });
+      }
     }
-    editorState.current.fileId = activeFile;
   }, [canvas, activeFile]);
 
   return (

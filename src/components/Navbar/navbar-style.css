@@ -8,7 +8,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  z-index: 10;
+  z-index: 11;
 }
 
 .user {
@@ -52,10 +52,6 @@
   z-index: 10;
 }
 
-.app-menu .menu {
-  width: 500px;
-}
-
 button.logo {
   display: grid;
   align-items: center;
@@ -69,6 +65,8 @@ button.logo {
 
 .files {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .file-item {
@@ -77,6 +75,7 @@ button.logo {
   color: #2d2d2d;
   cursor: pointer;
   border: 1px solid #dedede;
+  margin: 0.5em;
 }
 
 .file-item img {
@@ -109,4 +108,15 @@ button.logo {
   font-size: 0.9em;
   margin: 0.4em 0;
   cursor: pointer;
+}
+
+.app-menu .menu {
+  background: white;
+  border-radius: 0.3em;
+  width: 500px;
+  padding: 0.5em;
+}
+
+.app-menu .menu .branding {
+  justify-content: flex-end;
 }

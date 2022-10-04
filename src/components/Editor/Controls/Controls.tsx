@@ -11,6 +11,11 @@ import TextIcon from '../../../icons/text.svg';
 import ImgIcon from '../../../icons/image.svg';
 
 import './control-style.css';
+import { realtimeUser } from '~/supabase/config';
+import { useSelector } from 'react-redux';
+import { AccountDataType, ReducersType } from '~/redux/stores';
+import { getAbsolueObjects } from '~/utils/canvas';
+import { updateFile } from '~/supabase/api';
 
 export type ControlsPropsType = {
   canvas?: fabric.Canvas;
@@ -20,6 +25,8 @@ export type ControlsPropsType = {
 function Controls({ canvas, editorState }: ControlsPropsType) {
   const [editorData, setEditorState] = useState(editorState);
   const [openModal, setOpenModal] = useState<'imgDialog' | ''>('');
+  const { tempId } = useSelector<ReducersType, AccountDataType>((state) => state.account);
+  const fileApiRef = useRef<number>();
 
   const colorRef = useRef<HTMLInputElement>();
 
@@ -36,12 +43,35 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
       const activeElements = canvas?.getActiveObjects();
       if (activeElements.length) {
         activeElements.forEach((obj) => {
-          console.log({ obj });
           if (obj.type === 'path') {
             obj.set('stroke', value);
-          } else obj.set('fill', value);
+          } else {
+            obj.set('fill', value);
+          }
         });
+
+        const objects = getAbsolueObjects(canvas);
+
         canvas.renderAll();
+
+        const json = canvas?.toJSON(['id']);
+
+        if (fileApiRef.current) {
+          clearTimeout(fileApiRef.current);
+        }
+
+        fileApiRef.current = setTimeout(() => {
+          fileApiRef.current = undefined;
+          updateFile(editorData.fileId, { content: json }).catch((err) =>
+            console.error('Error while updaing color change', err),
+          );
+          realtimeUser.fileChange({
+            activeFile: editorData.fileId,
+            tempAccountId: tempId,
+            objects,
+            type: 'modified',
+          });
+        }, 500);
       }
       canvas.freeDrawingBrush.color = e.target.value;
       setEditorState((prev) => ({

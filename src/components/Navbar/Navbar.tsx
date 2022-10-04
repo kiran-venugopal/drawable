@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilesStateType } from '~/redux/filesSlice';
 import { AccountDataType, accountActions, ReducersType, filesActions } from '~/redux/stores';
+import { fetchFiles } from '~/supabase/api';
 import supabase, { realtimeUser } from '~/supabase/config';
 import { getRandomRolor } from '~/utils/account';
 import AppMenu from './AppMenu';
@@ -18,6 +19,7 @@ function Navbar() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+      console.log(session);
       if (session) {
         const userData = session.user?.user_metadata || {};
         userData.id = session.user.id;
@@ -38,10 +40,9 @@ function Navbar() {
         });
 
         // fetching user files
-        const { data, error } = await supabase
-          .from('files')
-          .select()
-          .in('id', userData.files || []);
+        const { data, error } = await fetchFiles(userData.files);
+
+        console.log({ files: data });
 
         if (error) {
           console.error(error);
@@ -54,6 +55,9 @@ function Navbar() {
         if (data.length) {
           fileData.activeFile = data[0].id;
           window.localStorage.setItem('active_file', data[0].id);
+        } else {
+          fileData.activeFile = 'local';
+          window.localStorage.setItem('active_file', 'local');
         }
 
         dispatch(filesActions.setFiles(fileData));
@@ -96,6 +100,7 @@ function Navbar() {
         user: {},
       }),
     );
+    await realtimeUser.signOut();
   };
 
   const handleUserClick = () => {

@@ -1,18 +1,18 @@
 import Logo from '../../icons/logo.svg';
 import DownArrow from '../../icons/darrow.svg';
 import Tab, { Panel } from '../Tab';
-import { useRef, useState } from 'react';
-import useContainerClick from 'use-container-click';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Files from './Files';
 import { ReducersType } from '~/redux/stores';
+import Dialog from '../Dialog';
+import Branding from '../Branding/Branding';
+import CreateFile from './MenuOptions/CreateFile';
 
 function AppMenu() {
   const [index, setIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const accountData = useSelector((state: ReducersType) => state.account);
-  const ref = useRef();
-  useContainerClick(ref as any, () => setIsOpen(false));
 
   if (!accountData.isLoggedIn) {
     return (
@@ -23,20 +23,24 @@ function AppMenu() {
   }
 
   return (
-    <div ref={ref as any} className='app-menu'>
+    <div className='app-menu'>
       <button onClick={() => setIsOpen((prev) => !prev)} className='logo'>
         <Logo />
         <DownArrow style={{ transform: `rotate(${isOpen ? 180 : 0}deg)` } as any} />
       </button>
-      {isOpen && (
-        <div className='menu dropdown'>
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div className='menu'>
+          <Branding />
           <Tab selectedIndex={index} onSelect={(i) => setIndex(i)}>
-            <Panel title='Files'>
+            <Panel title='All Files'>
               <Files />
+            </Panel>
+            <Panel title='Create New'>
+              <CreateFile onSuccess={() => setIsOpen(false)} />
             </Panel>
           </Tab>
         </div>
-      )}
+      </Dialog>
     </div>
   );
 }

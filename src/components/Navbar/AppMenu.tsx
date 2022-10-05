@@ -26,7 +26,7 @@ function AppMenu() {
     <div className='app-menu'>
       <button onClick={() => setIsOpen((prev) => !prev)} className='logo'>
         <Logo />
-        <DownArrow style={{ transform: `rotate(${isOpen ? 180 : 0}deg)` } as any} />
+        <DownArrow />
       </button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className='menu'>

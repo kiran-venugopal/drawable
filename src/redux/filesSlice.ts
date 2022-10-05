@@ -14,7 +14,7 @@ export type FilesStateType = {
   files: FileType[];
   activeFile: string;
   isFilesLoading: boolean;
-  filesFetchedOn: Date | null;
+  filesFetchedOn: string | null;
 };
 const initialFilesState: FilesStateType = {
   files: [],
@@ -28,7 +28,7 @@ const filesSlice = createSlice({
   initialState: initialFilesState,
   reducers: {
     setFiles(state, { payload }: { payload: Partial<FilesStateType> }) {
-      return { ...state, ...payload, filesFetchedOn: new Date() };
+      return { ...state, ...payload, filesFetchedOn: new Date().toISOString() };
     },
     setFilesLoading(state, { payload }) {
       return { ...state, isFilesLoading: payload };

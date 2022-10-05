@@ -38,13 +38,13 @@ export function resizeCanvas(canvas: fabric.Canvas) {
   // canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
 }
 
-export function createCanvas(editorStateRef: any): fabric.Canvas {
+export function createCanvas(editorData: any): fabric.Canvas {
   const canvas = new fabric.Canvas('fabric-container', {
     width: ((window.innerHeight - 150) * 3) / 2,
     height: window.innerHeight - 150,
-    isDrawingMode: freeDrawingControls.includes(editorStateRef.activeControl),
+    isDrawingMode: freeDrawingControls.includes(editorData.activeControl),
     selectionLineWidth: 3,
-    backgroundColor: editorStateRef.backgroundColor,
+    backgroundColor: editorData.backgroundColor,
     selectionColor: '#2195f37c',
     selectionBorderColor: '#2196f3',
   });
@@ -55,8 +55,8 @@ export function createCanvas(editorStateRef: any): fabric.Canvas {
 
   window.addEventListener('resize', () => resizeCanvas(canvas));
 
-  canvas.freeDrawingBrush.width = editorStateRef.brushWidth;
-  canvas.freeDrawingBrush.color = editorStateRef.color;
+  canvas.freeDrawingBrush.width = editorData.brushWidth;
+  canvas.freeDrawingBrush.color = editorData.color;
 
   return canvas;
 }

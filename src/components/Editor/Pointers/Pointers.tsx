@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilesStateType } from '~/redux/filesSlice';
 import { accountActions, AccountDataType, ReducersType } from '~/redux/stores';
@@ -41,21 +41,18 @@ function Pointers({ canvas }: PointerProps) {
   }, [canvas, activeFile]);
 
   useEffect(() => {
-    if (!isFilesLoading && activeFile !== 'local') {
-      const usersChannel = realtimeUser.getUserChannel(activeFile);
-      usersChannel
-        .on('presence', { event: 'sync' }, () => {
-          console.log('currently online users', usersChannel.presenceState());
-        })
-        .on('presence', { event: 'join' }, ({ newPresences }: any) => {
-          console.log('a new user has joined', newPresences);
-          dispatch(accountActions.addActiveUser(newPresences));
-        })
-        .on('presence', { event: 'leave' }, ({ leftPresences }: any) => {
-          console.log('a user has left', leftPresences);
-          dispatch(accountActions.removeActiveUser(leftPresences));
-        });
+    if (isFilesLoading || activeFile === 'local') {
+      return;
     }
+
+    const usersChannel = realtimeUser.getUserChannel(activeFile);
+    console.log({ activeFile });
+    usersChannel.on('presence', { event: 'sync' }, () => {
+      const currentState = usersChannel.presenceState();
+      const currentUsers = Object.values(currentState).map((users) => users[0]);
+      dispatch(accountActions.setActiveUsers(currentUsers || []));
+      console.log('currently online users', currentState, { currentUsers });
+    });
   }, [activeFile, isFilesLoading]);
 
   if (!canvas) return null;

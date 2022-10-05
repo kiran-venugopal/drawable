@@ -51,6 +51,7 @@ class RealtimeUser {
     if (this.userChannel && this.activeFile === fileId) {
       return this.userChannel;
     } else {
+      this.signOut();
       this.userChannel = supabase.channel(`onlineUsers(${fileId})`);
       this.userChannel.subscribe();
       this.activeFile = fileId;
@@ -125,6 +126,7 @@ class RealtimeUser {
   }
 
   signOut() {
+    this.userChannel?.unsubscribe();
     return this.userChannel?.untrack();
   }
 }

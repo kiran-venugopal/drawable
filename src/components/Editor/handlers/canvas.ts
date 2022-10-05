@@ -108,7 +108,7 @@ export async function handleObjectRemoved(
   canvas: fabric.Canvas,
   userId: string,
 ) {
-  console.log('removed');
+  console.log('removed', { canvas, userId });
   if (editorState.current.activeControl !== 'laser') {
     if (editorState.current.historyProcessing) {
       return;

@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { User } from '@supabase/supabase-js';
 import { uuidv4 } from '~/utils/account';
 import filesSlice, { FilesStateType } from './filesSlice';
 
@@ -34,18 +35,10 @@ const accountSlice = createSlice({
     setAccount(state, { payload }: { payload: Partial<AccountDataType> }) {
       return { ...state, ...payload };
     },
-    addActiveUser(state, { payload }: { payload: any[] }) {
+    setActiveUsers(state, { payload }) {
       return {
         ...state,
-        activeUsers: state.activeUsers.concat(payload.filter((user) => user.id !== state.tempId)),
-      };
-    },
-    removeActiveUser(state, { payload }) {
-      const ids = payload.map((u: any) => u.id);
-      console.log(ids);
-      return {
-        ...state,
-        activeUsers: state.activeUsers.filter((user) => !ids.includes(user.id)),
+        activeUsers: payload.filter((user: User) => user.id !== state.tempId),
       };
     },
   },

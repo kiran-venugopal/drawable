@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilesStateType, FileType } from '~/redux/filesSlice';
 import { AccountDataType, filesActions, ReducersType } from '~/redux/stores';
+import { fetchFiles } from '~/supabase/api';
 import FileItem from './FileItem';
 
 function Files() {
@@ -10,9 +10,18 @@ function Files() {
   const dispatch = useDispatch();
   console.log({ accountData });
 
-  function handleFileClick(fileId: string) {
-    dispatch(filesActions.setFiles({ activeFile: fileId }));
+  async function handleFileClick(fileId: string) {
+    dispatch(filesActions.setFiles({ activeFile: fileId, isFilesLoading: true }));
     window.localStorage.setItem('active_file', fileId);
+    const response = await fetchFiles([fileId]);
+    const file = response.data?.[0] || {};
+    const files = filesData.files.map((f) => {
+      if (f.id === file.id) {
+        return file;
+      }
+      return f;
+    });
+    dispatch(filesActions.setFiles({ activeFile: fileId, isFilesLoading: false, files }));
   }
 
   return (

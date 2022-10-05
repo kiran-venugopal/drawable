@@ -1,7 +1,5 @@
 import { ChangeEventHandler, FormEventHandler, useRef, useState } from 'react';
 import { fabric } from 'fabric';
-import { initialEditorState } from '../Editor';
-
 import MoveIcon from '../../../icons/move.svg';
 import PencilIcon from '../../../icons/pencil.svg';
 import LaserIcon from '../../../icons/laser.svg';
@@ -9,13 +7,13 @@ import SqaureIcon from '../../../icons/square.svg';
 import CircleIcon from '../../../icons/circle.svg';
 import TextIcon from '../../../icons/text.svg';
 import ImgIcon from '../../../icons/image.svg';
-
 import './control-style.css';
 import { realtimeUser } from '~/supabase/config';
 import { useSelector } from 'react-redux';
 import { AccountDataType, ReducersType } from '~/redux/stores';
 import { getAbsolueObjects } from '~/utils/canvas';
 import { updateFile } from '~/supabase/api';
+import { initialEditorState } from '../hooks/useEditor';
 
 export type ControlsPropsType = {
   canvas?: fabric.Canvas;

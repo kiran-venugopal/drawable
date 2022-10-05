@@ -1,5 +1,4 @@
 import Logo from '../../icons/logo.svg';
-import DownArrow from '../../icons/darrow.svg';
 import Tab, { Panel } from '../Tab';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -14,6 +13,8 @@ function AppMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const accountData = useSelector((state: ReducersType) => state.account);
 
+  const closeDialog = () => setIsOpen(false);
+
   if (!accountData.isLoggedIn) {
     return (
       <div className='app-menu'>
@@ -26,17 +27,16 @@ function AppMenu() {
     <div className='app-menu'>
       <button onClick={() => setIsOpen((prev) => !prev)} className='logo'>
         <Logo />
-        <DownArrow />
       </button>
-      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Dialog isOpen={isOpen} onClose={closeDialog}>
         <div className='menu'>
           <Branding />
           <Tab selectedIndex={index} onSelect={(i) => setIndex(i)}>
             <Panel title='All Files'>
-              <Files />
+              <Files onFileClick={closeDialog} />
             </Panel>
             <Panel title='Create New'>
-              <CreateFile onSuccess={() => setIsOpen(false)} />
+              <CreateFile onSuccess={closeDialog} />
             </Panel>
           </Tab>
         </div>

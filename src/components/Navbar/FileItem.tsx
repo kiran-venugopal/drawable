@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { placeholderImgPath } from '~/constants/urls';
 import supabase from '~/supabase/config';
+import { handleImageError } from '~/utils/image';
 
 export type FileItemPropsType = {
   id: string;
@@ -8,7 +10,7 @@ export type FileItemPropsType = {
 };
 
 function FileItem({ id, title, onClick }: FileItemPropsType) {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(placeholderImgPath);
 
   useEffect(() => {
     const fetchUrl = async () => {
@@ -21,7 +23,7 @@ function FileItem({ id, title, onClick }: FileItemPropsType) {
 
   return (
     <button onClick={() => onClick(id)} className='file-item'>
-      <img src={url} alt='' />
+      <img src={url} alt='' onError={handleImageError} />
       <div className='title'>{title}</div>
     </button>
   );

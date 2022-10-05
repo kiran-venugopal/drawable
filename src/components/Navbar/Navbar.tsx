@@ -5,6 +5,7 @@ import { AccountDataType, accountActions, ReducersType, filesActions } from '~/r
 import { fetchFiles } from '~/supabase/api';
 import supabase, { realtimeUser } from '~/supabase/config';
 import { getRandomRolor } from '~/utils/account';
+import { getLocalFileId } from '~/utils/canvas';
 import AppMenu from './AppMenu';
 import FileName from './FileName';
 import './navbar-style.css';
@@ -20,6 +21,7 @@ function Navbar() {
         data: { session },
       } = await supabase.auth.getSession();
       console.log(session);
+      // user is logged in
       if (session) {
         const userData = session.user?.user_metadata || {};
         userData.id = session.user.id;
@@ -53,8 +55,12 @@ function Navbar() {
 
         // selecting the default file
         if (data.length) {
-          fileData.activeFile = data[0].id;
-          window.localStorage.setItem('active_file', data[0].id);
+          let localFileId = getLocalFileId();
+          const activeFileObj = data.find((file) => file.id === localFileId);
+          if (!activeFileObj && localFileId !== 'local') {
+            localFileId = data[0].id;
+          }
+          window.localStorage.setItem('active_file', localFileId);
         } else {
           fileData.activeFile = 'local';
           window.localStorage.setItem('active_file', 'local');
@@ -66,7 +72,9 @@ function Navbar() {
           console.error(error);
           return;
         }
-      } else {
+      }
+      // user is not logged in
+      else {
         realtimeUser.setUser({
           name: 'Anonymous',
           color: getRandomRolor(),
@@ -84,6 +92,9 @@ function Navbar() {
   const handleSignInClick = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
+      options: {
+        redirectTo: 'http://localhost:3000',
+      },
     });
     console.log({ data, error });
   };

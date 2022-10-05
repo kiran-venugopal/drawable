@@ -55,6 +55,23 @@ button.primary:active {
   animation: spin 1200ms linear infinite;
 }
 
+.hint {
+  font-size: 0.8em;
+  width: 100%;
+  opacity: 0.7;
+  white-space: nowrap;
+  padding: 0.5em 1em;
+}
+
+button.link {
+  color: var(--primary);
+  font-size: 0.8em;
+}
+
+button.link:hover {
+  text-decoration: underline;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
   0% {

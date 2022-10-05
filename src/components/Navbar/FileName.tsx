@@ -2,14 +2,19 @@ import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useContainerClick from 'use-container-click';
 import { FilesStateType } from '~/redux/filesSlice';
-import { filesActions, ReducersType } from '~/redux/stores';
+import { AccountDataType, filesActions, ReducersType } from '~/redux/stores';
 import supabase from '~/supabase/config';
+import SaveAs from './MenuOptions/SaveAs';
 
 function FileName() {
-  const { activeFile, files } = useSelector<ReducersType, FilesStateType>((state) => state.files);
+  const { activeFile, files, isFilesLoading } = useSelector<ReducersType, FilesStateType>(
+    (state) => state.files,
+  );
+  const { isLoggedIn } = useSelector<ReducersType, AccountDataType>((state) => state.account);
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef(document.createElement('input'));
+
   const file = files.find((f) => f.id === activeFile);
 
   useContainerClick(inputRef, handleClose);
@@ -37,7 +42,14 @@ function FileName() {
     setIsEditing(false);
   }
 
-  if (!file) return null;
+  if (isFilesLoading) return null;
+
+  if (!file)
+    return (
+      <div className='file-name'>
+        {isLoggedIn ? <SaveAs /> : <div className='hint'>Sign in to save this file</div>}
+      </div>
+    );
 
   return (
     <div className='file-name'>

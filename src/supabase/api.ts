@@ -6,7 +6,7 @@ export async function updateFile(fileId: any, file: Partial<FileType>) {
   await supabase.from('files').update(file).eq('id', fileId);
 }
 
-export async function createFile(fileName: string, description?: string) {
+export async function createFile(fileName: string, description?: string, content?: any) {
   try {
     const {
       data: { session },
@@ -22,7 +22,7 @@ export async function createFile(fileName: string, description?: string) {
       .insert({
         title: fileName,
         description,
-        content: { background: 'white' },
+        content: content || { background: 'white' },
         owner_id: userId,
       })
       .select();

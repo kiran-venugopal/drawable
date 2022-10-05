@@ -20,11 +20,11 @@ function Editor() {
       return;
     }
 
-    if (editor.fileId !== activeFile) {
-      const file = files.find((f) => f.id === activeFile);
-      setEditorFile(file);
-    }
+    const file = files.find((f) => f.id === activeFile);
+    setEditorFile(file);
+  }, [isFilesLoading, activeFile]);
 
+  useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       if (!canvas) return;
 
@@ -66,7 +66,7 @@ function Editor() {
     window.addEventListener('keydown', onKeydown);
 
     return () => window.removeEventListener('keydown', onKeydown);
-  }, [isFilesLoading, activeFile, canvas]);
+  }, [canvas]);
 
   return (
     <div className='editor'>

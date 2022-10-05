@@ -64,18 +64,21 @@ button.logo {
 }
 
 .files {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-gap: 0.8em;
 }
 
 .file-item {
-  box-shadow: 0px 0px 5px #dadada;
   border-radius: 5px;
   color: #2d2d2d;
   cursor: pointer;
-  border: 1px solid #dedede;
-  margin: 0.5em;
+  box-shadow: 0px 0px 8px 0px #e9e9e9;
+  border: 1px solid transparent;
+}
+
+.file-item:hover {
+  border-color: #dfdfdf;
 }
 
 .file-item img {
@@ -91,13 +94,18 @@ button.logo {
   background: #f3f3f3;
 }
 
-.file-name input {
+.file-name {
+  z-index: 10;
+}
+
+.file-name > input {
   text-align: center;
   background: transparent;
   border: none;
-  border-bottom: 2px solid #1780d3;
+  border-bottom: 1px solid #39a0ee;
   outline: none;
   margin-top: 0.5em;
+  font-size: 0.9em;
 }
 
 .file-name .text:hover {

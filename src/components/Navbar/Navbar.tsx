@@ -119,10 +119,10 @@ function Navbar() {
   };
 
   return (
-    <div className='navbar'>
+    <Fragment>
       <AppMenu />
       <FileName />
-      <div className='account-nav'>
+      <div className='account-nav nav'>
         {accountData.isLoggedIn ? (
           <Fragment>
             <button onClick={handleUserClick} className='user'>
@@ -140,7 +140,7 @@ function Navbar() {
           <button onClick={handleSignInClick}>Sign In</button>
         )}
       </div>
-    </div>
+    </Fragment>
   );
 }
 

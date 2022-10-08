@@ -54,6 +54,10 @@ function SecondaryControls({ canvas }: ControlsPropsType) {
     }
   };
 
+  if (!canvas) {
+    return null;
+  }
+
   return (
     <div className='secondary controls'>
       <button onClick={handleUndoRedoClick('undo')} className='control-item'>

@@ -14,6 +14,7 @@ import { AccountDataType, ReducersType } from '~/redux/stores';
 import { getAbsolueObjects } from '~/utils/canvas';
 import { updateFile } from '~/supabase/api';
 import { initialEditorState } from '../hooks/useEditor';
+import { getCanvasInJSON } from '~/utils/config';
 
 export type ControlsPropsType = {
   canvas?: fabric.Canvas;
@@ -27,8 +28,6 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
   const fileApiRef = useRef<number>();
 
   const colorRef = useRef<HTMLInputElement>();
-
-  if (!canvas) return null;
 
   const handleControlClick = () => {
     colorRef.current?.click();
@@ -52,7 +51,7 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
 
         canvas.renderAll();
 
-        const json = canvas?.toJSON(['id']);
+        const json = getCanvasInJSON(canvas);
 
         if (fileApiRef.current) {
           clearTimeout(fileApiRef.current);
@@ -80,6 +79,11 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
   };
 
   const handleToggleDrawingMode = (type: 'pencil' | 'move' | 'laser') => () => {
+    if (!canvas) {
+      console.error('No canvas object', { canvas });
+      return;
+    }
+
     if (type === 'move') {
       canvas.isDrawingMode = false;
     } else canvas.isDrawingMode = true;
@@ -141,7 +145,7 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
           break;
       }
 
-      if (shapeObj) canvas.add(shapeObj as any);
+      if (shapeObj && canvas) canvas.add(shapeObj as any);
     };
 
   const handleImgClick = () => {
@@ -154,6 +158,8 @@ function Controls({ canvas, editorState }: ControlsPropsType) {
     const urlEl = (e.target as HTMLFormElement).querySelector('input');
     handleShapeClick('image')(urlEl?.value);
   };
+
+  if (!canvas) return null;
 
   return (
     <div className=' controls'>

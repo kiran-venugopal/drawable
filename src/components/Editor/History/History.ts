@@ -1,7 +1,13 @@
 class History {
-  actions: any[] = [{ background: 'white' }];
-  currentIndex = 0;
+  actions: any[] = [];
+  currentIndex = -1;
   limit = 200;
+
+  clear() {
+    this.actions = [];
+    this.currentIndex = -1;
+  }
+
   add(object: any) {
     this.actions.push(object);
     this.currentIndex = this.actions.length - 1;
@@ -17,7 +23,6 @@ class History {
     }
   }
   redo() {
-    console.log(this);
     if (this.currentIndex < this.actions.length - 1) {
       this.currentIndex++;
       return this.actions[this.currentIndex];

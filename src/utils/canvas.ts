@@ -190,3 +190,9 @@ export function getAbsolueObjects(canvas: fabric.Canvas) {
   canvas.setActiveObject(activeSelection);
   return objects;
 }
+
+export function removeObjects(objects: any[], canvas: fabric.Canvas) {
+  const IDs = objects.map((obj) => obj.id);
+  const objectsFromCanvas = canvas.getObjects().filter((obj: any) => IDs.includes(obj.id));
+  canvas.remove(...objectsFromCanvas);
+}

@@ -3,6 +3,7 @@ import { updateFile } from '~/supabase/api';
 import { realtimeUser } from '~/supabase/config';
 import { uuidv4 } from '~/utils/account';
 import { getAbsolueObjects, setLocalFilteContent } from '~/utils/canvas';
+import { getCanvasInJSON } from '~/utils/config';
 import history from '../History';
 
 export async function hanldeObjectAdd(
@@ -36,7 +37,12 @@ export async function hanldeObjectAdd(
       return;
     }
 
-    const json = event.target?.canvas?.toObject(['id']);
+    const canvas = event.target?.canvas;
+    if (!canvas) {
+      console.error('Canvas object is missing', { canvas });
+      return;
+    }
+    const json = getCanvasInJSON(canvas);
     console.log({ json });
     history.add(json);
     setLocalFilteContent(json as any);
@@ -73,7 +79,8 @@ export async function handleObjectModified(
     if (editorState.current.historyProcessing) {
       return;
     }
-    const json = event.target?.canvas?.toJSON(['id']);
+
+    const json = getCanvasInJSON(canvas);
     history.add(json);
     setLocalFilteContent(json as any);
     const objInJSON = event.target?.toJSON(['id']);
@@ -103,17 +110,16 @@ export async function handleObjectModified(
 }
 
 export async function handleObjectRemoved(
-  event: fabric.IEvent<Event>,
+  _: fabric.IEvent<Event>,
   editorState: MutableRefObject<any>,
   canvas: fabric.Canvas,
-  userId: string,
 ) {
-  console.log('removed', { canvas, userId });
   if (editorState.current.activeControl !== 'laser') {
     if (editorState.current.historyProcessing) {
       return;
     }
-    const json = event.target?.canvas?.toDatalessJSON();
+    const json = getCanvasInJSON(canvas);
+
     history.add(json);
     setLocalFilteContent(json as any);
     updateFile(editorState.current.fileId, { content: json }).catch((err) => {

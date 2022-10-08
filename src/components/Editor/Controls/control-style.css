@@ -58,7 +58,8 @@ button.control-item.active {
 .image-input.dropdown {
   left: 60px;
   top: 0;
-  padding: 5px 10px 10px 10px;
+  padding: 10px 10px 2px 10px;
+  min-width: 300px;
 }
 .image-input.dropdown h3 {
   margin-top: 0;

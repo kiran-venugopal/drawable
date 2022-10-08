@@ -46,15 +46,21 @@ function FileName() {
 
   if (!file)
     return (
-      <div className='file-name'>
+      <div className='file-name nav'>
         {isLoggedIn ? <SaveAs /> : <div className='hint'>Sign in to save this file</div>}
       </div>
     );
 
   return (
-    <div className='file-name'>
+    <div className='file-name nav'>
       {isEditing ? (
-        <input ref={inputRef as any} onChange={handleNameChange} value={file.title} />
+        <input
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={true}
+          ref={inputRef as any}
+          onChange={handleNameChange}
+          value={file.title}
+        />
       ) : (
         <button onClick={() => setIsEditing(true)} className='text'>
           {file.title}

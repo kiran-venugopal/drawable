@@ -6,7 +6,7 @@ import Files from './Files';
 import { ReducersType } from '~/redux/stores';
 import Dialog from '../Dialog';
 import Branding from '../Branding/Branding';
-import CreateFile from './MenuOptions/CreateFile';
+import CreateFile from './MenuOptions/CreateFile/CreateFile';
 
 function AppMenu() {
   const [index, setIndex] = useState(0);
@@ -17,14 +17,14 @@ function AppMenu() {
 
   if (!accountData.isLoggedIn) {
     return (
-      <div className='app-menu'>
+      <div className='app-menu nav'>
         <Logo />
       </div>
     );
   }
 
   return (
-    <div className='app-menu'>
+    <div className='app-menu nav'>
       <button onClick={() => setIsOpen((prev) => !prev)} className='logo'>
         <Logo />
       </button>

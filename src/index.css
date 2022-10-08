@@ -57,7 +57,6 @@ button.primary:active {
 
 .hint {
   font-size: 0.8em;
-  width: 100%;
   opacity: 0.7;
   white-space: nowrap;
   padding: 0.5em 1em;

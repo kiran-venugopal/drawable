@@ -9,6 +9,7 @@ import { getLocalFileId } from '~/utils/canvas';
 import AppMenu from './AppMenu';
 import FileName from './FileName';
 import './navbar-style.css';
+import SignIn from './SignIn/SignIn';
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -89,16 +90,6 @@ function Navbar() {
     checkAuth();
   }, []);
 
-  const handleSignInClick = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: 'http://localhost:3000',
-      },
-    });
-    console.log({ data, error });
-  };
-
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -137,7 +128,7 @@ function Navbar() {
             )}
           </Fragment>
         ) : (
-          <button onClick={handleSignInClick}>Sign In</button>
+          <SignIn />
         )}
       </div>
     </Fragment>

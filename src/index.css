@@ -1,5 +1,6 @@
 * {
   --primary: #008fe0;
+  --danger: #d62417;
 }
 
 body {
@@ -67,10 +68,33 @@ button.link {
   font-size: 0.8em;
 }
 
-button.link:hover {
-  text-decoration: underline;
+button.secondary {
+  background: #00000009;
 }
 
+button.secondary:hover {
+  background: #00000010;
+}
+
+button.link:hover {
+  text-decoration: underline;
+  background: #00000009;
+}
+
+button.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+button.icon .label {
+  padding-left: 0.5em;
+}
+
+.error-message {
+  color: var(--danger);
+  font-weight: 500;
+  font-size: 0.8em;
+}
 /* Safari */
 @-webkit-keyframes spin {
   0% {

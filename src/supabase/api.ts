@@ -23,7 +23,7 @@ export async function createFile(fileName: string, description?: string, content
         title: fileName,
         description,
         content: content || { background: 'white' },
-        owner_id: userId,
+        owner: userId,
       })
       .select();
     if (err) {
@@ -51,4 +51,20 @@ export async function fetchFiles(fileIds: string[]) {
     .from('files')
     .select()
     .in('id', fileIds || []);
+}
+
+export async function createUser(
+  name: string,
+  email: string,
+  color: string,
+  avatar_url: string,
+  uid: string,
+) {
+  return supabase.from('user').insert({
+    name,
+    email,
+    color,
+    avatar_url,
+    account: uid,
+  });
 }

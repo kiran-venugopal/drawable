@@ -1,26 +1,3 @@
-.field {
-  margin: 0.5em 0;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 0.25em;
-}
-
-.field label span {
-  opacity: 0.6;
-  margin-left: 0.2em;
-}
-
-.field input {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.field input:hover {
-  border-color: grey;
-}
-
 form.create-file {
   max-width: 300px;
   margin: auto;

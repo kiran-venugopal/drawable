@@ -41,10 +41,6 @@
   text-align: center;
 }
 
-.account-nav button:hover {
-  background: whitesmoke;
-}
-
 .app-menu {
   margin: 0.5em;
   z-index: 11;

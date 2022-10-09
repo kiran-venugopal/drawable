@@ -1,5 +1,6 @@
 import { FormEventHandler } from 'react';
 import { useDispatch } from 'react-redux';
+import Input from '~/components/Common/Input';
 import { FileType } from '~/redux/filesSlice';
 import { filesActions } from '~/redux/stores';
 import { createFile } from '~/supabase/api';
@@ -28,16 +29,8 @@ function CreateFile({ onSuccess, content }: CreateFileProps) {
 
   return (
     <form className='create-file' onSubmit={handleSubmit}>
-      <div className='field'>
-        <label htmlFor='#file-name'>File name</label>
-        <input required id='file-name' name='file-name' type='text' placeholder='' />
-      </div>
-      <div className='field'>
-        <label htmlFor='#file-name'>
-          File description <span>(optional)</span>{' '}
-        </label>
-        <input id='file-description' name='file-name' type='text' placeholder='' />
-      </div>
+      <Input label='File name' id='file-name' name='file-name' />
+      <Input label='File description' id='file-description' name='file-name' isOptional />
       <div className='actions'>
         <button className='primary'>Create</button>
       </div>

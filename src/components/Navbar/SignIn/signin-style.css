@@ -1,0 +1,33 @@
+.sign-in {
+  min-width: 340px;
+}
+
+.sign-in button.gauth {
+  margin: auto;
+}
+.divider {
+  margin: 1em 0;
+}
+
+.dropdown.auth {
+  padding: 1em;
+}
+
+.auth .actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.auth .error-message {
+  text-align: left;
+}
+
+.auth-form .field {
+  text-align: left;
+}
+button.link {
+  margin-right: auto;
+  font-size: 0.8em;
+}

@@ -8,9 +8,10 @@ const initialErrors = {};
 
 export type SignUpFormProps = {
   onLoginClick(): void;
+  onSignUpSuccess(): void;
 };
 
-function SignUpForm({ onLoginClick }: SignUpFormProps) {
+function SignUpForm({ onLoginClick, onSignUpSuccess }: SignUpFormProps) {
   const [errors, setErrors] = useState<Record<any, string>>(initialErrors);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -56,6 +57,7 @@ function SignUpForm({ onLoginClick }: SignUpFormProps) {
       user.user_metadata.avatar_url || '',
       user?.id,
     ).catch((err) => console.error(err));
+    onSignUpSuccess();
   };
 
   return (

@@ -13,13 +13,24 @@ const handleSignInClick = async () => {
   console.log({ data, error });
 };
 
+const STATES = {
+  INIT: '',
+  SIGNUP_SUCCESS: 'Your account has been successfully created! Login to continue',
+};
+
 function SignIn() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const [status, setStatus] = useState<string>(STATES.INIT);
 
   const toggleIsLogin = () => setIsLogin((prev) => !prev);
 
   const toggleIsOpen = () => setIsOpen((prev) => !prev);
+
+  const handleSignUpSuccess = () => {
+    setIsLogin(true);
+    setStatus(STATES.SIGNUP_SUCCESS);
+  };
 
   return (
     <Fragment>
@@ -31,8 +42,9 @@ function SignIn() {
           {isLogin ? (
             <LoginForm onCreateAccountClick={toggleIsLogin} />
           ) : (
-            <SignUpForm onLoginClick={toggleIsLogin} />
+            <SignUpForm onLoginClick={toggleIsLogin} onSignUpSuccess={handleSignUpSuccess} />
           )}
+          {status === STATES.SIGNUP_SUCCESS && <div className='success-message'>{status}</div>}
           <Divider text='OR' />
           <div className='sign-in'>
             <button className='gauth icon secondary' onClick={handleSignInClick}>

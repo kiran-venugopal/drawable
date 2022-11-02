@@ -1,6 +1,11 @@
 import { FormEventHandler, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Input from '~/components/Common/Input';
+import { FilesStateType } from '~/redux/filesSlice';
+import { accountActions, filesActions } from '~/redux/stores';
+import { fetchFiles } from '~/supabase/api';
 import supabase from '~/supabase/config';
+import { updateActiveFile } from '~/utils/account';
 
 const initialErrors = {};
 
@@ -10,6 +15,7 @@ export type LoginFormPropsType = {
 
 function LoginForm({ onCreateAccountClick }: LoginFormPropsType) {
   const [errors, setErrors] = useState<Record<any, string>>(initialErrors);
+  const dispatch = useDispatch();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -26,7 +32,27 @@ function LoginForm({ onCreateAccountClick }: LoginFormPropsType) {
       setErrors({ general: error.message });
       return;
     }
-    console.log({ data });
+    const user = data.user?.user_metadata;
+    const userId = data.user?.id;
+    dispatch(
+      accountActions.setAccount({
+        isLoggedIn: true,
+        user: {
+          name: user?.name,
+          color: user?.color,
+          id: data.user?.id,
+        },
+      }),
+    );
+
+    if (!userId) {
+      console.error('No user id found!', { data });
+      return;
+    }
+
+    const { data: files } = await fetchFiles(userId);
+    const fileData = updateActiveFile({ files });
+    dispatch(filesActions.setFiles(fileData));
   };
 
   return (

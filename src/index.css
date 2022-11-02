@@ -1,6 +1,7 @@
 * {
   --primary: #008fe0;
   --danger: #d62417;
+  --success: #0e840e;
 }
 
 body {
@@ -94,6 +95,12 @@ button.icon .label {
   color: var(--danger);
   font-weight: 500;
   font-size: 0.8em;
+}
+
+.success-message {
+  color: var(--success);
+  font-size: 0.8em;
+  font-weight: 500;
 }
 /* Safari */
 @-webkit-keyframes spin {

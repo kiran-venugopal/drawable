@@ -46,11 +46,8 @@ export async function createFile(fileName: string, description?: string, content
   }
 }
 
-export async function fetchFiles(fileIds: string[]) {
-  return await supabase
-    .from('files')
-    .select()
-    .in('id', fileIds || []);
+export async function fetchFiles(accountId: string) {
+  return await supabase.from('files').select().eq('owner', accountId);
 }
 
 export async function createUser(

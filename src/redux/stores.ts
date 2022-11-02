@@ -15,7 +15,7 @@ export type AccountDataType = {
     name?: string;
     color?: string;
     id?: string;
-    files?: string[];
+    avatar_url?: string;
   };
   tempId: string;
   activeUsers: ActiveUserType[];

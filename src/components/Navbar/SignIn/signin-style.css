@@ -27,6 +27,10 @@
 .auth-form .field {
   text-align: left;
 }
+.auth .success-message {
+  margin: 1em 0;
+}
+
 button.link {
   margin-right: auto;
   font-size: 0.8em;

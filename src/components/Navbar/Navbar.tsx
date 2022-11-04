@@ -89,7 +89,7 @@ function Navbar() {
   }, []);
 
   return (
-    <Fragment>
+    <div className='top-nav'>
       <AppMenu />
       <FileName />
       <AccountMenu
@@ -98,7 +98,7 @@ function Navbar() {
         isLoggedIn={accountData.isLoggedIn}
         avatarUrl={avatar_url}
       />
-    </Fragment>
+    </div>
   );
 }
 

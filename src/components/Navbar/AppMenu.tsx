@@ -17,14 +17,14 @@ function AppMenu() {
 
   if (!accountData.isLoggedIn) {
     return (
-      <div className='app-menu nav'>
+      <div className='app-menu'>
         <Logo />
       </div>
     );
   }
 
   return (
-    <div className='app-menu nav'>
+    <div className='app-menu '>
       <button onClick={() => setIsOpen((prev) => !prev)} className='logo'>
         <Logo />
       </button>

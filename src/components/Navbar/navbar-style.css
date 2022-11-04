@@ -1,12 +1,14 @@
+.top-nav {
+  position: fixed;
+  top: 0;
+  display: flex;
+  width: 100%;
+  z-index: 10;
+}
+
 .account-nav {
   margin: 0.5em;
   right: 0;
-}
-
-.nav {
-  position: fixed;
-  top: 0;
-  z-index: 10;
 }
 
 .user {
@@ -94,9 +96,9 @@ button.logo {
   width: calc(100% - 200px);
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: auto;
   left: 100px;
+  height: fit-content;
+  flex-grow: 1;
 }
 
 .file-name > input {

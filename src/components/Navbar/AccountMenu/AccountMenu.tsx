@@ -42,7 +42,7 @@ function AccountMenu({ name, userColor, avatarUrl, isLoggedIn }: AccountMenuProp
   };
 
   return (
-    <div className='account-nav nav'>
+    <div className='account-nav'>
       {isLoggedIn ? (
         <Fragment>
           <button onClick={handleUserClick} className='user'>

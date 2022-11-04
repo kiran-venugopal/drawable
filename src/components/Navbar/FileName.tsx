@@ -42,17 +42,17 @@ function FileName() {
     setIsEditing(false);
   }
 
-  if (isFilesLoading) return null;
+  if (isFilesLoading) return <div className='file-name'></div>;
 
   if (!file)
     return (
-      <div className='file-name nav'>
+      <div className='file-name'>
         {isLoggedIn ? <SaveAs /> : <div className='hint'>Sign in to save this file</div>}
       </div>
     );
 
   return (
-    <div className='file-name nav'>
+    <div className='file-name'>
       {isEditing ? (
         <input
           // eslint-disable-next-line jsx-a11y/no-autofocus
